@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -40,8 +41,12 @@ public class Cliente implements Serializable {
 	private String correo;
 	
 	@Column(name = "create_at")
+	@NotNull(message = "No puede ser vacio")
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
+	
+	@Column(name = "foto")
+	private String foto;
 	
 	public Long getId() {
 		return id;
@@ -73,10 +78,12 @@ public class Cliente implements Serializable {
 	public void setCreatAt(Date createAt) {
 		this.createAt = createAt;
 	}
+	/*
 	@PrePersist
 	public void asignaFecha() {
 		createAt = new Date();
 	}
+	*/
 	public Cliente() {}
 	
 	public Cliente(Long id, String nombre, String apellido, String correo, Date creatAt) {
@@ -91,6 +98,13 @@ public class Cliente implements Serializable {
 	public String toString() {
 		return "Cliente [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo
 				+ ", creatAt=" + createAt + "]";
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 	private static final long serialVersionUID = 1L;
