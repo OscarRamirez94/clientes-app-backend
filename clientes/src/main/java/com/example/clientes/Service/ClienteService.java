@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.clientes.IService.IClienteService;
 import com.example.clientes.dao.IClienteDao;
 import com.example.clientes.entity.Cliente;
+import com.example.clientes.entity.Region;
 
 @Service
 public class ClienteService implements IClienteService {
@@ -48,5 +49,12 @@ public void eliminar(Long id) {
 public Page<Cliente> findAll(Pageable page) {
 	// TODO Auto-generated method stub
 	return clienteDao.findAll(page);
+}
+
+@Override
+@Transactional(readOnly = true)
+public List<Region> findAllRegion() {
+	// TODO Auto-generated method stub
+	return clienteDao.findAllRegion();
 }
 }

@@ -44,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.clientes.IService.IClienteService;
 import com.example.clientes.IService.IUploadService;
 import com.example.clientes.entity.Cliente;
+import com.example.clientes.entity.Region;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -153,6 +154,7 @@ public class ClienteController {
 			clienteActual.setApellido(cliente.getApellido());
 			clienteActual.setCorreo(cliente.getCorreo());
 			clienteActual.setCreatAt(cliente.getCreateAt());
+			clienteActual.setRegion(cliente.getRegion());
 			clienteUpdated = clienteService.save(clienteActual);
 
 		} catch (DataAccessException e) {
@@ -236,6 +238,11 @@ public class ClienteController {
 		
 		return new ResponseEntity<Resource>(recurso,cabecera,HttpStatus.OK);
 		
+	}
+	
+	@GetMapping("/clientes/regiones")
+	public List<Region> listaRegiones() {
+		return clienteService.findAllRegion();
 	}
 	
 
