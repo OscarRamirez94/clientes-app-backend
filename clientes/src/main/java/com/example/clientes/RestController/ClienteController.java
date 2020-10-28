@@ -53,22 +53,20 @@ public class ClienteController {
 	private final Logger log = LoggerFactory.getLogger(ClienteController.class);
 	@Autowired
 	private IClienteService clienteService;
-	
+
 	@Autowired
 	private IUploadService uploadService;
-	
 
 	@GetMapping("/clientes")
 	public List<Cliente> listaCliente() {
 		return clienteService.findAll();
 	}
-	
+
 	@GetMapping("/clientes/page/{page}")
 	public Page<Cliente> listaCliente(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 2);
 		return clienteService.findAll(pageable);
 	}
-	
 
 	@GetMapping("/clientes/{id}")
 
@@ -95,17 +93,15 @@ public class ClienteController {
 
 	@PostMapping("/clientes")
 
-	public ResponseEntity<?> create(@Valid @RequestBody  Cliente cliente, BindingResult result) {
+	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
 		Map<String, Object> response = new HashMap();
-		
-		if(result.hasErrors()) {
-		
-			List<String> errors =result.getFieldErrors()
-					.stream()
-					.map(err -> err.getField() + " :: " + err.getDefaultMessage())
-					.collect(Collectors.toList());
-			
-			response.put("errors",errors);
+
+		if (result.hasErrors()) {
+
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> err.getField() + " :: " + err.getDefaultMessage()).collect(Collectors.toList());
+
+			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		Cliente clienteAdd = null;
@@ -121,7 +117,7 @@ public class ClienteController {
 		response.put("mensaje", "El cliente creado con éxito");
 		response.put("cliente", clienteAdd);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-	
+
 	}
 
 	@PutMapping("/clientes/{id}")
@@ -129,20 +125,19 @@ public class ClienteController {
 	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, @PathVariable Long id, BindingResult result) {
 		Map<String, Object> response = new HashMap();
 		Cliente clienteUpdated = null;
-		
-		if(result.hasErrors()) {
-			
-			List<String> errors =result.getFieldErrors()
-					.stream()
-					.map(err -> "Campo :: "+ err.getField() +" :: "+  err.getDefaultMessage())
+
+		if (result.hasErrors()) {
+
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> "Campo :: " + err.getField() + " :: " + err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
-			response.put("errors",errors);
+
+			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 
 		Cliente clienteActual = clienteService.findyById(id);
-		
+
 		if (clienteActual == null) {
 			response.put("mensaje", "El cliente id : " + id + " no existe");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
@@ -178,7 +173,7 @@ public class ClienteController {
 			Cliente cliente = clienteService.findyById(id);
 			String nombreArchivoAnt = cliente.getFoto();
 			uploadService.eliminar(nombreArchivoAnt);
-			
+
 			clienteService.eliminar(id);
 
 		} catch (DataAccessException e) {
@@ -192,24 +187,23 @@ public class ClienteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
-	
+
 	@PostMapping("/clientes/upload")
-	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id){
+	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap();
 		Cliente cliente = clienteService.findyById(id);
-		if(!archivo.isEmpty()) {
-			
+		if (!archivo.isEmpty()) {
+
 			String nombreArchivo = null;
 			try {
 				nombreArchivo = uploadService.copiarFoto(archivo);
 			} catch (IOException e) {
-			
-			
+
 				response.put("mensaje", "Error al cargar imagen");
 				response.put("error", e.getMessage() + " : " + e.getCause());
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			
+
 			String nombreArchivoAnt = cliente.getFoto();
 			uploadService.eliminar(nombreArchivoAnt);
 			cliente.setFoto(nombreArchivo);
@@ -217,33 +211,33 @@ public class ClienteController {
 			response.put("cliente", cliente);
 			response.put("mensaje", "Has subido correctamente el archivo " + nombreArchivo);
 		}
-		
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-		
+
 	}
+
 	@GetMapping("uploads/img/{nombreFoto:.+}")
-	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
-		
+	public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto) {
+
 		Resource recurso = null;
-		
+
 		try {
 			recurso = uploadService.cargarFoto(nombreFoto);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		HttpHeaders cabecera = new  HttpHeaders();
-		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ recurso.getFilename() + "\"");
-		
-		return new ResponseEntity<Resource>(recurso,cabecera,HttpStatus.OK);
-		
+
+		HttpHeaders cabecera = new HttpHeaders();
+		cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + recurso.getFilename() + "\"");
+
+		return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+
 	}
-	
+
 	@GetMapping("/clientes/regiones")
 	public List<Region> listaRegiones() {
 		return clienteService.findAllRegion();
 	}
-	
 
 }
