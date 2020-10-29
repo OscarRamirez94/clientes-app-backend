@@ -16,11 +16,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.clientes.IService.IUsuarioService;
 import com.example.clientes.dao.IUsuarioDao;
 import com.example.clientes.entity.Usuario;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements IUsuarioService, UserDetailsService {
 	private final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 	@Autowired 
 	private IUsuarioDao usuarioDao;
@@ -40,6 +41,12 @@ public class UsuarioService implements UserDetailsService {
 				
 		return new User(usuario.getUsername(), usuario.getPassword(),usuario.getEnabled(), 
 				true, true, true, authorities);
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public Usuario findByUsername(String username) {
+		return usuarioDao.findByUsername(username);
+		 
 	}
 
 }

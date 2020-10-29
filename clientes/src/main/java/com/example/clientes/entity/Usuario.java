@@ -24,6 +24,10 @@ public class Usuario implements Serializable {
 	private Long id;
 	@Column(unique = true, length = 20)
 	private String username;
+	private String nombre;
+	private String apellido;
+	@Column(unique = true, length = 50)
+	private String email;
 	@Column(length = 70)
 	private String password;
 
@@ -34,6 +38,7 @@ public class Usuario implements Serializable {
 	inverseJoinColumns = @JoinColumn(name = "idRol"),
 	uniqueConstraints = {@UniqueConstraint(columnNames = {"idUsuario","idRol"})})
 	private List<Rol> Roles;
+	
 
 	public Long getId() {
 		return id;
@@ -92,6 +97,33 @@ public class Usuario implements Serializable {
 	}
 	
 	public Usuario() {}
+
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 
 	private static final long serialVersionUID = 1L;

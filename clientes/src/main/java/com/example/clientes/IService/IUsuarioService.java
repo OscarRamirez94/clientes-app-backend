@@ -1,5 +1,7 @@
 package com.example.clientes.IService;
 
-public interface IUsuarioService {
+import com.example.clientes.entity.Usuario;
 
+public interface IUsuarioService {
+	public Usuario findByUsername(String username);
 }
