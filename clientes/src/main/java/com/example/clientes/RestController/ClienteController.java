@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -68,8 +69,8 @@ public class ClienteController {
 		return clienteService.findAll(pageable);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/clientes/{id}")
-
 	public ResponseEntity<?> clienteByid(@PathVariable Long id) {
 		Cliente cliente = null;
 		Map<String, Object> response = new HashMap();
@@ -90,7 +91,7 @@ public class ClienteController {
 		}
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 	}
-
+	@Secured("ROLE_ADMIN")
 	@PostMapping("/clientes")
 
 	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
@@ -120,8 +121,8 @@ public class ClienteController {
 
 	}
 
+	@Secured("ROLE_ADMIN")
 	@PutMapping("/clientes/{id}")
-
 	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, @PathVariable Long id, BindingResult result) {
 		Map<String, Object> response = new HashMap();
 		Cliente clienteUpdated = null;
@@ -164,8 +165,8 @@ public class ClienteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/clientes/{id}")
-
 	public ResponseEntity<?> elimina(@PathVariable Long id) {
 		Map<String, Object> response = new HashMap();
 
@@ -187,7 +188,8 @@ public class ClienteController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 
 	}
-
+	
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@PostMapping("/clientes/upload")
 	public ResponseEntity<?> upload(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") Long id) {
 		Map<String, Object> response = new HashMap();
@@ -235,6 +237,7 @@ public class ClienteController {
 
 	}
 
+	@Secured("ROLE_ADMIN")
 	@GetMapping("/clientes/regiones")
 	public List<Region> listaRegiones() {
 		return clienteService.findAllRegion();
