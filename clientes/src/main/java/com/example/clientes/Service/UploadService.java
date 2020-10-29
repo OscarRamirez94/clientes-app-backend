@@ -27,7 +27,7 @@ public class UploadService implements IUploadService{
 		Resource recurso =  new UrlResource(rutaArchivo.toUri());
 		
 		if(!recurso.exists() && !recurso.isReadable()) {
-			rutaArchivo = Paths.get("src/main/resource/static/images/noUser.jpg").resolve(nombreFoto).toAbsolutePath();
+			rutaArchivo = Paths.get("src/main/resource/static/images/nouser.jpg").resolve(nombreFoto).toAbsolutePath();
 			recurso = new UrlResource(rutaArchivo.toUri());
 			
 			
