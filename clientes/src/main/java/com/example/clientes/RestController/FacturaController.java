@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.clientes.IService.IFacturaService;
 import com.example.clientes.entity.Cliente;
 import com.example.clientes.entity.Factura;
+import com.example.clientes.entity.Producto;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -27,15 +30,32 @@ public class FacturaController {
 	@Autowired
 	private IFacturaService facturaService;
 	
+	
 	@GetMapping("/facturas/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public Factura lista( @PathVariable("id") Long id) {
+		
 		return facturaService.findyById(id);
 	}
 	
 	@DeleteMapping("/facturas/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void elimina( @PathVariable("id") Long id) {
-		 facturaService.findyById(id);
+		
+		 facturaService.eliminar(id);
+	}
+	
+	@GetMapping("/facturas/filtrar-productos/{nombre}")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Producto> filterProducto( @PathVariable("nombre") String nombre) {
+		
+		return facturaService.findProductoByNombre(nombre);
+	}
+	
+	@PostMapping("/facturas")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Factura crear(@RequestBody Factura factura) {
+		 return facturaService.save(factura);
+		
 	}
 }

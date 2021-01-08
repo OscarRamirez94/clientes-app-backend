@@ -8,12 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.clientes.IService.IFacturaService;
 import com.example.clientes.dao.IFacturaDao;
+import com.example.clientes.dao.IProductoDao;
 import com.example.clientes.entity.Factura;
+import com.example.clientes.entity.Producto;
 
 @Service
 public class FacturaService implements IFacturaService{
 	@Autowired 
 	private IFacturaDao facturaDao;
+	@Autowired 
+	private IProductoDao productoDao;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -39,6 +43,12 @@ public class FacturaService implements IFacturaService{
 	public void eliminar(Long id) {
 		facturaDao.deleteById(id);
 		
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findProductoByNombre(String nombre) {	
+		return productoDao.findByNombreContainingIgnoreCase(nombre);
 	}
 
 }
