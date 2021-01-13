@@ -60,6 +60,7 @@ public class ClienteController {
 
 	@GetMapping("/clientes")
 	public List<Cliente> listaCliente() {
+		
 		return clienteService.findAll();
 	}
 
@@ -69,7 +70,7 @@ public class ClienteController {
 		return clienteService.findAll(pageable);
 	}
 
-	//@Secured({"ROLE_ADMIN", "ROLE_USER"})
+	@Secured({"ROLE_ADMIN", "ROLE_USER"})
 	@GetMapping("/clientes/{id}")
 	public ResponseEntity<?> clienteByid(@PathVariable Long id) {
 		Cliente cliente = null;

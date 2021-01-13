@@ -28,6 +28,8 @@ public class UsuarioService implements IUsuarioService, UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		
 		Usuario usuario = usuarioDao.findByUsername(username);
 		if(usuario == null) {
 			log.error("No existe usuario en la base de datos"+ username);
